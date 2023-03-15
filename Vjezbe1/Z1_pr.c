@@ -26,6 +26,8 @@ int main(void)
     }
   }
   pi = 4 * ((float)unutar / (float)ukupno);
-  printf("pi = %f", pi);
+  printf("pi = %f\n", pi);
+  printf("Greska je: %f", pi - M_PI);
+
   return 0;
 }
