@@ -1,0 +1,9 @@
+za p(x)=1, n=5000000:
+Fn=0.746786
+sigma=0.200950
+sigma/sqrt(n)=0.000090
+
+za p(x)=A*exp(-x), n=400000:
+Fn=0.746846
+sigma=0.055002
+sigma/sqrt(n)=0.000087
