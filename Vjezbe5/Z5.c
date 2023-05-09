@@ -3,15 +3,15 @@
 #include <math.h>
 #include "ran1.c"
 
-double f(double x)
-{
-  return exp(-(x * x));
-}
+// double f(double x)
+// {
+//   return exp(-(x * x));
+// }
 
-double p(double A, double x)
-{
-  return A * exp(-x);
-}
+// double p(double A, double x)
+// {
+//   return A * exp(-x);
+// }
 
 #define n1 5000000
 #define n2 400000
@@ -29,7 +29,7 @@ int main(void)
   for (i = 0; i < n1; i++)
   {
     g = ran1(&idum);
-    x = f(g);
+    x = exp(-(g * g));
     suma1 += x;
     suma2 += x * x;
   }
@@ -44,7 +44,7 @@ int main(void)
   for (i = 0; i < n2; i++)
   {
     g = (-1.0) * log(1 - ran1(&idum) / A);
-    x = f(g) / p(A, g);
+    x = exp(-(g * g)) / (A * exp(-g));
     suma1 += x;
     suma2 += x * x;
   }
