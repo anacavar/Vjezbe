@@ -2,17 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "ran1.c"
-
-// double f(double x)
-// {
-//   return exp(-(x * x));
-// }
-
-// double p(double A, double x)
-// {
-//   return A * exp(-x);
-// }
-
 #define n1 5000000
 #define n2 400000
 
