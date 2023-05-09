@@ -125,7 +125,7 @@ int main(void)
   {
     for (int j = 0; j <= 50; j++)
     {
-      if (i == 20 || i == 60 || i == 120 || i == 200)
+      if (i == 50 || i == 100 || i == 150)
       {
         fprintf(rhodata, "%f %f\n", j * delta_x - 100, rho[j]);
         if (j == 50)
