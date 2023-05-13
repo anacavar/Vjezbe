@@ -1,29 +1,23 @@
-// Primjer MC koda za samo jedan vremenski korak radioaktivnog raspada
-#ifdef _WIN32
-#define _CRT_SECURE_NO_DEPRECATE
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include "ran1.c"
-#define dt 0.00649212768 // min - vremenski korak
-#define w 10000          // broj nezavisnih sustava
-#define tmax 4000        // broj vremenskih koraka
+#define Nw 1000 // broj nezavisnih sustava
+
 int main()
 {
-  FILE *fout;
-  long idum = (-2468);
-  int i, j, t, Nt, k, N[w], N0 = 1000;
-  float P[w];
-  float suma = 0;
-  float p, r, konacno = 1;
-  fout = fopen("raspad.dat", "w");
-  p = 0.4;
-  suma = 0;
-  for (i = 0; i < w; i++) // postavljanje početnog broja jezgri u sustavima
-    N[i] = N0;
-  t = dt;
-  for (j = 0; j < w; j++) // petlja po nezavisnim sustavima (šetačima)
+  int i, j, t, Nt, k, N[Nw] = {1000};
+  long idum = (-1234);
+  float P[Nw], poisson[Nw];
+  float var, suma = 0, suma2 = 0;
+  int faktorijel;
+  float p = 0.02, halflife = 2.5, r, dt, lambda, avg = 1;
+  FILE *file;
+  file = fopen("raspad.txt", "w");
+  lambda = log(2) / halflife;
+  dt = p / lambda;
+
+  for (j = 0; j < Nw; j++) // petlja po nezavisnim sustavima (šetačima)
   {
     Nt = 0;
     for (i = 1; i <= N[j]; i++)
@@ -35,16 +29,27 @@ int main()
     P[Nt] += 1; // računanje vjerojatnosti
     N[j] = Nt;
     suma += N[j];
-    fprintf(fout, "%d, ", N[j]); // broj raspadnutih jezgri u svakom sustavu
+    suma2 += N[j] * N[j];
   }
-  konacno = suma / w; // srednja vrijednost
-  printf("<n> = %f", konacno);
-  // Racunanje vjerojatnosti raspada n jezgara
-  for (k = 1; k <= 70; k++)
+
+  avg = suma / Nw; // srednja vrijednost
+  var = (suma2 / Nw - (suma / Nw) * (suma / Nw));
+
+  printf("dt = %d\n<n> = %f\nvariance = %f\n", dt, avg, var);
+
+  for (k = 1; k <= 20; k++)
   {
-    P[k] = P[k] / w;
-    fprintf(fout, "%d\t%f\n", k, P[k]);
+    P[k] = P[k] / (float)Nw;
+    faktorijel = 1;
+    for (int i = 1; i <= k; i++)
+    {
+      faktorijel = i * faktorijel;
+    }
+
+    poisson[k] = (pow(avg, k) * exp(-avg)) / faktorijel;
+
+    fprintf(file, "%d\t%f\t%f\n", k, P[k], poisson[k]);
   }
-  fclose(fout);
+  fclose(file);
   return 0;
 }
