@@ -1,0 +1,8 @@
+Z10
+Izvršite Z11 na klasteru Isabeella. Postavite velik broj šetača.
+Priložite: kod, graf i skripte.
+
+(EN)
+Run Z11 on the cluster Isabella. Set large number of walkers.
+Submit: code, graph and scripta.
+
