@@ -1,0 +1,1 @@
+Natural units for energy and position taken from: https://en.wikipedia.org/wiki/Quantum_harmonic_oscillator#Natural_length_and_energy_scales

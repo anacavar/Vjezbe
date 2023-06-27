@@ -1,0 +1,9 @@
+mA = mB = 2 u
+epsilon = 100 K
+sigma = 4 Å
+
+1u = 
+https://physics.nist.gov/cgi-bin/cuu/Value?Rukg|search_for=mass+unit
+
+kB = 
+https://physics.nist.gov/cgi-bin/cuu/Value?k|search_for=Boltzmann

@@ -1,0 +1,14 @@
+STOHSIM SCRIPTA
+The VMC method is summarized by Eqs (4.2)-(4.7).
+We apply Metropolis algorithm.
+Example: H atom (proton + electron) 
+Primjer 1.4. (pg. 117-118)
+Primjer 4.4. (pg. 125-126)
+
+Z12(EN)
+Let the particles A and B of masses mA and mB interact with the Lennard-Jones potential 12-6 whose parameters are the potential depth epsilon and zero point sigma. Choose (4.26) for the trial wave function and estimate the ground state energy using the VMC method.
+Parameters mA, mB, epsilon and sigma are given in in your map on OndeDrive (Z12_*.txt). Attach the code, a graph or table of the dependence of energy on parameters and the final estimate of energy and its deviation written on graph that confirms the equilibrium sampling.
+
+Z12(HR)
+Neka čestice A i B masa mA i mB interagiraju Lennard-Jones potencijalom 12-6 čiji su parametri dubina potencijala epsilon i nultočka sigma. Za probnu valnu funkciju odaberite (4.26) te koristeći VMC metodu procijenite energiju osnovog stanja.
+U vašoj mapi na OneDriveu zadani su mA, mB, epsilon i sigma (Z12_*.txt). Priložite kod, graf ili tablicu ovisnosti energije o parametrima te konačnu procjenu energije i njene devijacije napisanu na grafu koji potvrđuje ravnotežno uzorkovanje.
