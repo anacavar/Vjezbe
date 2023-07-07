@@ -16,7 +16,7 @@ Koristene oznake:
 			ib    = indeks bloka, trenutni blok
 			Nk    = broj koraka (number of steps)
 			ik    = indeks koraka, trenutni korak
-			Nw    = broj setaca (nuber of walkers)
+			Nw    = broj setaca (number of walkers)
 			iw    = indeks setaca
 			NbSkip= broj preskocenih blokova
 
@@ -209,10 +209,6 @@ main(void)
 }
 
 // 0) DEFINIRAJTE Psi
-
-// double Psi (double r, double z){
-//    return z*exp(-r/2.);
-// }
 
 double Psi(double r)
 {

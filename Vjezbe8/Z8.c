@@ -22,7 +22,7 @@ int main(void)
   float vTmp;                     // trenutna veličina v
   float Edemona_k[Nk + 1];
   float Esustava_k[Nk + 1];
-  float V[N + 1][Nw + 1];
+  float V[N + 1][Nw + 1]; // index čestice, indeks šetača
   float DIS_Edemona[idm] = {0.};
   float dE_demona = 100;
   float sumEdemona1 = 0, sumEsustava1 = 0;
@@ -79,6 +79,7 @@ int main(void)
       sumEsustava = sumEsustava + E_sustava[j];
       sumEsustava1 = sumEsustava1 + E_sustava[j];
     }
+
     sumEdemona = sumEdemona / Nw;
     sumEsustava = sumEsustava / Nw;
     Edemona_tot = sumEdemona1 / (Nw * i);
