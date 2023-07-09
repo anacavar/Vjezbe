@@ -46,7 +46,7 @@ int main(void)
   {
     for (j = 1; j <= Nw; j++) // po šetačima
     {
-      for (int k = 1; k <= N; k++)
+      for (int k = 1; k <= N; k++) // po česticama
       {
         ip = (int)(ran1(&idum) * N + 1);
         if (ip == N + 1)
