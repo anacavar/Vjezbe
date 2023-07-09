@@ -138,7 +138,7 @@ int main(void)
         // trebamo skalirati promjene na koordinate čestica te pak računati U
         for (k = 1; k <= N; k++) // po česticama
         {
-          x[i][k] = L[i]
+          x[i][k] = L[i];
         }
       }
       else
