@@ -27,8 +27,6 @@ float lennardJones(float x1, float x2, float y1, float y2)
   return a;
 }
 
-// računa W = šta ono, onaj eksponent raspodjele
-// ne, mislim da samo računa kao... U
 float unutarnja_energija(float x[Nw + 1][N + 1], float y[Nw + 1][N + 1], int i)
 {
   float potEtemp = 0;
@@ -69,6 +67,7 @@ int main(void)
   float dx, dy; // promjene koordinata x i y
   float dxMax = 0.1, dyMax = 0.1;
   float V_prije, V_poslije, U_prije, U_poslije, delta_V, delta_H, delta_U;
+  float ran; // random broj pri određivanju odbacivanja/prihvaćanja koraka
 
   FILE *data, *koordinate;
   data = fopen("data.txt", "w");
@@ -135,7 +134,7 @@ int main(void)
       }
 
       // račun vjerojatnosti prihvaćanja p
-      V_poslije = V[i]; // provjeri
+      V_poslije = V[i];
       U_poslije = unutarnja_energija(x, y, i);
       delta_V = V_poslije - V_prije;
       delta_U = U_poslije - U_prije;
@@ -146,6 +145,36 @@ int main(void)
       printf("p = %f\n", p);
 
       // PRIHVAĆA LI SE KORAK ILI ODBACUJE? (na temelju p)
+
+      // UDŽBENIK THO: Probna konfiguracija se prihva ́ca ukoliko je ∆W ≤ 0 i s vjerojat-
+      // nosti e−∆W ukoliko je ∆W > 0.
+      // ----> ŠTA JE DELTA W U KONTEKSTU NPTa?
+
+      // METROPOLIS IN GENERAL:
+      // 3. IzraČunamo ∆E, promjenu potencijalne energije sustava zbog probnog pomaka.
+      // 4. Ako je ∆E ≤0 nova konfiguracija se prihvaća i odlazi se na 8. korak
+      // 5. Ako je ∆E > 0, računamo w = e−β∆E.
+      // 6. Generiramo iz jednolike raspodjele slučajni broj r u segmentu [0,1].
+      // 7. Ako je r ≤ w, prihvaćamo probni pomak; u suprotnom zadržavamo prethodno
+      // mikrostanje.
+      // 8. Određujemo željene fizikalne veličine
+
+      // Bez obzira na to jesmo li radili promjene opisane u koraku 2) ili 3), generiramo
+      // nasumični broj pomoću kojega odlučujemo prihvaćamo li promjenu ili ne. Odluku
+      // donosimo po sljedećem kriteriju
+      // if(ran.le.p) Prihvaćamo promjenu
+      // else Ne prihvaćamo promjenu
+      // gdje je p pripadajuća vjerojatnost prihvaćanja promjene.
+      ran = ran1(&idum);
+      printf("ran = %f\n", ran);
+
+      if (ran < p)
+        printf("Promjena prihvaćena!\n");
+      else
+        printf("Promjena nije prihvaćena\n");
+
+      // Nakon određenog broja koraka, maximalne pomake koordinata, kuta i volumena
+      // korigiramo tako da dobivamo optimalnu prihvaćenost [13].
     }
   }
 
@@ -156,9 +185,7 @@ int main(void)
       fprintf(data, "%f\t%f\n", x[i][j], y[i][j]);
     }
   }
-
   fclose(data);
   fclose(koordinate);
-
   return 0;
 }
