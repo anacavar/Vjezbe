@@ -97,12 +97,10 @@ int main(void)
 
   for (i = 1; i <= Nw; i++) // po šetačima - mikrostanja - šetaći po 3N dimenzionalnom faznom prostoru
   {
-    // printf("%d\n", i);
     for (j = 1; j <= Nk; j++) // po koracima
     {
       V_prije = V[i];
       U_prije = unutarnja_energija(x, y, i);
-
       for (k = 1; k <= N; k++) // po česticama
       {
         dx = (ran1(&idum) * 2 - 1) * dxMax;
@@ -165,6 +163,7 @@ int main(void)
       // if(ran.le.p) Prihvaćamo promjenu
       // else Ne prihvaćamo promjenu
       // gdje je p pripadajuća vjerojatnost prihvaćanja promjene.
+
       ran = ran1(&idum);
       printf("ran = %f\n", ran);
 
