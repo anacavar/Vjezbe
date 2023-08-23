@@ -1,3 +1,6 @@
+// Idealni plin => brzine čestica jedine su značajne veličine za promatranje energije
+// Argon => trebaju mi i pozicije i brzine
+
 
 // 1. Uspostavimo početno mikrostanje.
 // 2. Napravimo slučajnu probnu promjenu u mikrostanju. Primjerice, izaberemo neki
@@ -93,11 +96,11 @@
 // e−W = e−βPV −βU({s})+N ln V
 
 // postotak_prihvacanja++;
-// [13:08, 09/07/2023] אנה: Najˇceš ́ce je potrebno mnogo uzoraka sluˇcajnog hoda prije postizanja asimptotske raspod-
-// jele vjerojatnosti p(x). Postavlja se pitanje kako izabrati maksimalnu veliˇcinu koraka δ. Ako
-// je δ prevelik, samo  ́ce mali broj probnih koraka biti prihva ́cen pa  ́ce uzorkovanje od p(x) biti
+// [13:08, 09/07/2023] אנה: Najčešće je potrebno mnogo uzoraka slučajnog hoda prije postizanja asimptotske raspod-
+// jele vjerojatnosti p(x). Postavlja se pitanje kako izabrati maksimalnu veličinu koraka δ. Ako
+// je δ prevelik, samo  ́ce mali broj probnih koraka biti prihvaćen pa  ́ce uzorkovanje od p(x) biti
 // neefikasno. S druge strane, ako je δ premalen, veliki postotak probnih koraka bit  ́ce prihva ́cen
-// pa  ́ce opet uzorkovanje p(x) biti neefikasno. Grubi kriterij za odabir veliˇcine koraka δ je da ot-
+// pa  ́ce opet uzorkovanje p(x) biti neefikasno. Grubi kriterij za odabir veličine koraka δ je da ot-
 // prilike jedna tre ́cina do jedna polovica koraka trebaju biti prihva ́ceni. Tako  ̄der je dobro izabrati
 // i x0 tako da raspodjela xi dostigne asimptotsku raspodjelu ˇcim je prije mogu ́ce. Oˇciti je izbor
 // poˇceti sluˇcajni hod na vrijednosti od x za koju je p(x) znaˇcajan

@@ -299,6 +299,7 @@ double energija(double x[Nw][Np + 2][2], int iw)
 				ryij = ryij + Ly;
 			rij2 = rxij * rxij + ryij * ryij;
 			if (rij2 <= Lminp2)
+			// ovo tu mi je lennard-jones...
 			{
 				sr2 = 1. / rij2;
 				sr6 = sr2 * sr2 * sr2;
@@ -307,5 +308,6 @@ double energija(double x[Nw][Np + 2][2], int iw)
 			}
 		}
 	}
+	// ovo tu mi vraća lennard jones ukupni valjda
 	return (4. * sum);
 }
