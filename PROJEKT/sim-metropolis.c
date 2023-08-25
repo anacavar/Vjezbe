@@ -5,9 +5,9 @@
 #include <math.h>
 #include "ran1.c"
 
-#define N 100    // broj čestica
-#define Nw 1     // broj šetača
-#define Nk 100   // broj koraka
+#define N 1000   // broj čestica - previsoka gustoća
+#define Nw 10    // broj šetača
+#define Nk 1000  // broj koraka
 #define Nb 11    // broj blokova
 #define Nbskip 1 // broj blokova koje preskačemo --- zašto? "zbog stabilizacije?"
 
@@ -27,7 +27,7 @@ float lennardJones(float x1, float x2, float y1, float y2, float z1, float z2)
 float rxLJforce(float x1, float x2, float y1, float y2, float z1, float z2)
 {
   float product;
-  float E = 1;                                                                                      // J, za Argon
+  float E = 0;                                                                                      // J, za Argon
   float x = (3.4 * pow(10, -10)) / sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2) + pow((z2 - z1), 2)); // x = sigma/r
   x = pow(x, 6);                                                                                    // x = (sigma/r)**6
   if (x <= 1)
@@ -83,11 +83,12 @@ int main(void)
   int i, j, k, ib;
   long idum = -1234;
   // konstante:
+  float m_rho = 6.69 / 1.784 * pow(10, -26);        // masa kroz gustoću - gustoća argona (at STP): 1.784 g/L == kg/metarkubni
   float m_kb = 6.69 / 1.380649 * pow(10, -26 + 23); // masa kroz k_B = 0.004846
   float m_E = 6.69 / 1.65 * pow(10, -26 + 21);      // masa kroz E_lennardjones
   float E_kb = 1.65 / 1.380649 * pow(10, -21 + 23); // E/kB
   float k_B = 1.380649 * pow(10, -23);              // boltzmannova konstanta == kolko?
-  float L0 = 0.00000001;                            // da bi volumen bio -3x8=24 + 2(100 čestica) = 26 - red veličine realne gustoće
+  float L0 = cbrt(N * m_rho);                       // da bi volumen bio -3x8=24 + 2(100 čestica) = 26 - red veličine realne gustoće
   float E = 1.65 * pow(10, -21);
   // veličine:
   float x[Nw + 1][N + 1]; // broj šetača, broj čestica
@@ -145,10 +146,8 @@ int main(void)
     T[i] = 0.6666 * m_kb / N * Uk[i]; // PRERAČUNATO U SI JEDINICE SA STVARNIM VRIJEDNOSTIMA (OSIM ŠTA NISAM SIGURNA JESU LI BRZINE REALNE)
     L[i] = L0;
     V[i] = L0 * L0 * L0;
-    // press[i] = 1 / V[i] * (N * k_B * T[i] - 1 / (3 * k_B * T[i]) * rfSum(x, y, z, i)); // kaj još s ovim?
-    press[i] = 1 / V[i] * (N * k_B * T[i]); // kaj još s ovim? --IDEALNI PLIN (za sega...)
+    press[i] = 1 / V[i] * (N * k_B * T[i] - 1 / (3 * k_B * T[i]) * rfSum(x, y, z, i)); // kaj još s ovim?
     printf("T=%f; p=%f; rfSum=%f; Upot=%f; Ukin=%f; Uuk=%f; E_kb=%f; V=%f; rfSum/V=%f\n", T[i], press[i], rfSum(x, y, z, i), Upot(x, y, z, i), m_E * Uk[i], U[i], E_kb, V[i], 1 / V[i]);
-    // ZAŠTO MI SE OVO PRINTA SAMO JEDAMPUT???? ^^^
   }
 
   // for (ib = 1; ib <= Nb; ib++) // po bloku
@@ -171,13 +170,13 @@ int main(void)
         dy = (ran1(&idum) * 2 - 1) * dxyzMax;
         dz = (ran1(&idum) * 2 - 1) * dxyzMax;
         dv = (ran1(&idum) * 2 - 1) * dvMax;
-        x_old[k] = x[j][k]; // za svaku česticu unutar šetača registriramo zadnju raspodjelu kako bismo mogli reversat stanje ako korak ovog šetača nije prihvaćen
-        y_old[k] = y[j][k]; // za svaku česticu unutar šetača registriramo zadnju raspodjelu kako bismo mogli reversat stanje ako korak ovog šetača nije prihvaćen
-        z_old[k] = z[j][k]; // za svaku česticu unutar šetača registriramo zadnju raspodjelu kako bismo mogli reversat stanje ako korak ovog šetača nije prihvaćen
+        x_old[k] = x[j][k];
+        y_old[k] = y[j][k];
+        z_old[k] = z[j][k];
         v_old[k] = v[j][k];
-        x[j][k] += dx; // broj šetača, broj čestica
-        y[j][k] += dy; // broj šetača, broj čestica
-        z[j][k] += dz; // broj šetača, broj čestica
+        x[j][k] += dx;
+        y[j][k] += dy;
+        z[j][k] += dz;
         v[j][k] += dv;
         // brzina ne smije biti negativna (jer odražava apsolutnu vrijednost) iako možda ovo opće nije bitno zbog kvadrata?
         if (v[j][k] < 0)
@@ -206,9 +205,9 @@ int main(void)
         V[j] = L[j] * L[j] * L[j];
         for (k = 1; k <= N; k++) // po česticama
         {
-          x[j][k] = L[j] / (L[j] - dL) * x[j][k]; // skaliranje svih x koordinata faktorom L'/L
-          y[j][k] = L[j] / (L[j] - dL) * y[j][k]; // skaliranje svih y koordinata faktorom L'/L
-          z[j][k] = L[j] / (L[j] - dL) * z[j][k]; // skaliranje svih z koordinata faktorom L'/L
+          x[j][k] = L[j] / L_old * x[j][k]; // skaliranje svih x koordinata faktorom L'/L
+          y[j][k] = L[j] / L_old * y[j][k]; // skaliranje svih y koordinata faktorom L'/L
+          z[j][k] = L[j] / L_old * z[j][k]; // skaliranje svih z koordinata faktorom L'/L
         }
       }
       // ponovno računanje termodinamičkih vrijednosti
@@ -216,8 +215,7 @@ int main(void)
       Up[j] = Upot(x, y, z, j);   // * E => SI
       U[j] = Up[j] + m_E * Uk[j]; // * E => SI
       T[j] = 0.6666 * m_kb / N * Uk[j];
-      // press[j] = 1 / V[j] * (N * k_B * T[j] - 1 / (3 * k_B * T[j]) * rfSum(x, y, z, j));
-      press[j] = 1 / V[j] * (N * k_B * T[j]);
+      press[j] = 1 / V[j] * (N * k_B * T[j] - 1 / (3 * k_B * T[j]) * rfSum(x, y, z, j));
       // delte
       delta_V = V[j] - V_old;
       delta_U = U[j] - U_old;
@@ -301,7 +299,7 @@ int main(void)
     U_mean = U_mean / Nw;
     T_mean = T_mean / Nw;
     p_mean = p_mean / Nw;
-    fprintf(data, "%d\t%f\t%f\t%f\t%f\t%f\n", i, L[1] / L0, V_mean / L0 * L0 * L0, U_mean, T_mean, p_mean);
+    fprintf(data, "%d\t%f\t%f\t%f\t%f\t%f\n", i, L[1] / L0, V_mean / (L0 * L0 * L0), U_mean, T_mean, p_mean);
     // }
 #pragma endregion
   }
