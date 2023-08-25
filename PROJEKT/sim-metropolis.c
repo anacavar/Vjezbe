@@ -7,7 +7,7 @@
 
 #define N 100    // broj čestica
 #define Nw 1     // broj šetača
-#define Nk 1000  // broj koraka
+#define Nk 100   // broj koraka
 #define Nb 11    // broj blokova
 #define Nbskip 1 // broj blokova koje preskačemo --- zašto? "zbog stabilizacije?"
 
@@ -88,6 +88,7 @@ int main(void)
   float E_kb = 1.65 / 1.380649 * pow(10, -21 + 23); // E/kB
   float k_B = 1.380649 * pow(10, -23);              // boltzmannova konstanta == kolko?
   float L0 = 0.00000001;                            // da bi volumen bio -3x8=24 + 2(100 čestica) = 26 - red veličine realne gustoće
+  float E = 1.65 * pow(10, -21);
   // veličine:
   float x[Nw + 1][N + 1]; // broj šetača, broj čestica
   float y[Nw + 1][N + 1]; // broj šetača, broj čestica
@@ -104,7 +105,7 @@ int main(void)
   float x0, y0, z0, v0, vmin = 400, vmax = 500; // prosječna brzina čestice u plinu je oko 450 m/s
   float dL, dLMax = L0 / 100;                   // metara
   float dx, dy, dz, dv;                         // promjene koordinata i brzina
-  float dxyzMax = 0.1, dvMax = 5;               // maksimalne promjene
+  float dxyzMax = 0.01 * L0, dvMax = 5;         // maksimalne promjene
   // pomoćne varijable
   float delta_V, delta_H, delta_U, delta_W;
   float x_old[N + 1], y_old[N + 1], z_old[N + 1], v_old[N + 1]; // za reversat promjenu koordinata ako se korak odbacuje - mislim da ovo mora bit array po svim česticama?
@@ -156,7 +157,7 @@ int main(void)
   {
     for (j = 1; j <= Nw; j++) // po šetačima - mikrostanja - šetači po 3N dimenzionalnom faznom prostoru
     {
-      printf("prije: L/10^8=%f; V/L0^3=%f; T=%f; U=%f; Upot=%f; Ukin=%f\n", 1 / L[j], V[j] / (L0 * L0 * L0), T[j], U[j], Up[j], Uk[j]);
+      printf("prije: L/10^8=%f; V/L0^3=%f; T=%f; U=%f; Upot=%f; Ukin=%f\n", L[j] / L0, V[j] / (L0 * L0 * L0), T[j], U[j], Up[j], Uk[j]);
       V_old = V[j];
       L_old = L[j];
       Uk_old = Uk[j];
@@ -220,10 +221,10 @@ int main(void)
       // delte
       delta_V = V[j] - V_old;
       delta_U = U[j] - U_old;
-      delta_H = delta_U + press[j] * delta_V - k_B * T[j] * N * log(V[j] / V_old);
-      delta_W = 1 / (k_B * T[j]) * delta_H * pow(10, -26);
-      // printf("1/deltaV=%f; deltaU=%f; deltaH=%f; deltaW=%f\n", 1 / delta_V, delta_U, delta_H, delta_W);
-      printf("poslije: L/10^8=%f; V/L0^3=%f; T=%f; U=%f; Upot=%f; Ukin=%f\n", 1 / L[j], V[j] / (L0 * L0 * L0), T[j], U[j], Up[j], Uk[j]);
+      delta_H = E * delta_U + press[j] * delta_V - k_B * T[j] * N * log(V[j] / V_old);
+      delta_W = 1 / (k_B * T[j]) * delta_H;
+      printf("deltaV/L0^3=%f; deltaU=%f; deltaH=%f; deltaW=%f => p=%f\n", delta_V / (L0 * L0 * L0), delta_U, delta_H, delta_W, exp(-delta_W));
+      printf("poslije: L/10^8=%f; V/L0^3=%f; T=%f; U=%f; Upot=%f; Ukin=%f\n", L[j] / L0, V[j] / (L0 * L0 * L0), T[j], U[j], Up[j], Uk[j]);
 #pragma region // Metropolis algoritam
       if (delta_W > 0)
       {
@@ -300,7 +301,7 @@ int main(void)
     U_mean = U_mean / Nw;
     T_mean = T_mean / Nw;
     p_mean = p_mean / Nw;
-    fprintf(data, "%d\t%f\t%f\t%f\t%f\n", i, V_mean / L0 * L0 * L0, U_mean, T_mean, p_mean);
+    fprintf(data, "%d\t%f\t%f\t%f\t%f\t%f\n", i, L[1] / L0, V_mean / L0 * L0 * L0, U_mean, T_mean, p_mean);
     // }
 #pragma endregion
   }
