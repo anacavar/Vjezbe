@@ -1,6 +1,14 @@
 // Idealni plin => brzine čestica jedine su značajne veličine za promatranje energije
 // Argon => trebaju mi i pozicije i brzine
 
+  // BRIJEM DA MI OVE TRI NE TREBAJU NEGO NA PRAVO GI RAČUNAŠ...
+  // float E0 = 20.;              // ukupna početna energija - KOLIKA?
+  // float pressure = 100663.5;           // pascala... (SI unit) pressure - KOLIKI?
+  // float pressure = 100000.5; // pascala... (SI unit) pressure - KOLIKI?
+  // float T0 = 300;            // kelvina, temperature - KOLIKA?
+  // float k_B = 1.380649 * pow(10, -23); // boltzmannova konstanta = 1.380649 × 10-23 m2 kg s-2 K-1
+  // float m = 6.69 * pow(10, -26); // kg, za Argon
+  // float rho = 1.784; // gustoća argona Density (at STP): 1.784 g/L == kg/metarkubni
 
 // 1. Uspostavimo početno mikrostanje.
 // 2. Napravimo slučajnu probnu promjenu u mikrostanju. Primjerice, izaberemo neki
