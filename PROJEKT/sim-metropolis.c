@@ -9,7 +9,7 @@
 #define Nw 10    // broj šetača
 #define Nk 1000  // broj koraka
 #define Nb 11    // broj blokova
-#define Nbskip 1 // broj blokova koje preskačemo --- zašto? "zbog stabilizacije?"
+#define Nbskip 1 // broj blokova koje preskačemo radi stabilizacije
 
 float lennardJones(float x1, float x2, float y1, float y2, float z1, float z2)
 {
@@ -95,8 +95,8 @@ int main(void)
   float y[Nw + 1][N + 1]; // broj šetača, broj čestica
   float z[Nw + 1][N + 1]; // broj šetača, broj čestica
   float v[Nw + 1][N + 1]; // brzine čestica
-  float L[Nw + 1];        // stranica - ALI ZAŠTO Nw*?? jer svaki walker tj sistem čestica ima svoj L parametar
-  float V[Nw + 1];        // volumen - svaki walker tj sistem čestica ima svoj parametar
+  float L[Nw + 1];        // stranica
+  float V[Nw + 1];        // volumen
   float U[Nw + 1];        // unutarnja energija (Upot + Ukin)
   float Uk[Nw + 1];       // kinetička energija
   float Up[Nw + 1];       // potencijalna energija
@@ -109,7 +109,7 @@ int main(void)
   float dxyzMax = 0.01 * L0, dvMax = 5;         // maksimalne promjene
   // pomoćne varijable
   float delta_V, delta_H, delta_U, delta_W;
-  float x_old[N + 1], y_old[N + 1], z_old[N + 1], v_old[N + 1]; // za reversat promjenu koordinata ako se korak odbacuje - mislim da ovo mora bit array po svim česticama?
+  float x_old[N + 1], y_old[N + 1], z_old[N + 1], v_old[N + 1]; // za reversat promjenu koordinata ako se korak odbacuje
   float V_old, L_old, U_old, Up_old, Uk_old, T_old, press_old;  // za reversat promjenu u slučaju odbacivanja
   float p, ran;                                                 // vjerojatnost prihvaćanja promjene, random broj pri određivanju odbacivanja/prihvaćanja koraka
   int N_change_volume = 5;
@@ -143,10 +143,10 @@ int main(void)
     Uk[i] = Ukin(v, i);               // * m => SI
     Up[i] = Upot(x, y, z, i);         // * E => SI
     U[i] = Up[i] + m_E * Uk[i];       // * E => SI
-    T[i] = 0.6666 * m_kb / N * Uk[i]; // PRERAČUNATO U SI JEDINICE SA STVARNIM VRIJEDNOSTIMA (OSIM ŠTA NISAM SIGURNA JESU LI BRZINE REALNE)
+    T[i] = 0.6666 * m_kb / N * Uk[i]; // SI
     L[i] = L0;
     V[i] = L0 * L0 * L0;
-    press[i] = 1 / V[i] * (N * k_B * T[i] - 1 / (3 * k_B * T[i]) * rfSum(x, y, z, i)); // kaj još s ovim?
+    press[i] = 1 / V[i] * (N * k_B * T[i] - 1 / (3 * k_B * T[i]) * rfSum(x, y, z, i));
     printf("T=%f; p=%f; rfSum=%f; Upot=%f; Ukin=%f; Uuk=%f; E_kb=%f; V=%f; rfSum/V=%f\n", T[i], press[i], rfSum(x, y, z, i), Upot(x, y, z, i), m_E * Uk[i], U[i], E_kb, V[i], 1 / V[i]);
   }
 
@@ -178,7 +178,7 @@ int main(void)
         y[j][k] += dy;
         z[j][k] += dz;
         v[j][k] += dv;
-        // brzina ne smije biti negativna (jer odražava apsolutnu vrijednost) iako možda ovo opće nije bitno zbog kvadrata?
+        // brzina ne smije biti negativna (jer odražava apsolutnu vrijednost)
         if (v[j][k] < 0)
           v[j][k] = -v[j][k];
         // rubni uvjeti
