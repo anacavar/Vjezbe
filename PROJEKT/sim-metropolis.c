@@ -5,7 +5,7 @@
 #include <math.h>
 #include "ran1.c"
 
-#define N 1000   // broj čestica - previsoka gustoća
+#define N 1000   // broj čestica
 #define Nw 10    // broj šetača
 #define Nk 1000  // broj koraka
 #define Nb 11    // broj blokova
